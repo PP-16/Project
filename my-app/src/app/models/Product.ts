@@ -14,3 +14,12 @@ export interface Category {
     brand: string;
     type:  string;
 }
+
+export interface ProductParams {
+    orderBy: string;
+    searchTerm?: string;
+    types: string[];
+    brands: string[];
+    pageNumber: number;
+    pageSize: number;
+} 

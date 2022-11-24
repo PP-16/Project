@@ -21,6 +21,8 @@ import Fab from '@mui/material/Fab';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ShoppingBasketOutlinedIcon from '@mui/icons-material/ShoppingBasketOutlined';
 import { NavLink } from 'react-router-dom';
+import { useStoreContext } from '../contact/StoreContext';
+import { useAppSelector } from '../redux/configureStore';
 
 //#region Search
 const Search = styled('div')(({ theme }) => ({
@@ -111,6 +113,9 @@ const navStyles = {
 //#endregion
 
 export default function Header(props: any) {
+    const { basket } = useAppSelector(state=>state.basket)
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
     //#region bar1
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -333,8 +338,8 @@ export default function Header(props: any) {
                                 inputProps={{ 'aria-label': 'search' }}
                             />
                         </Search>
-                        <IconButton sx={{ml:15}} color="inherit">
-                            <StyledBadge badgeContent={4} color="error">
+                        <IconButton sx={{ml:15}} color="inherit" component={NavLink} to="/basket">
+                            <StyledBadge badgeContent={itemCount} color="error">
                                 <ShoppingBasketOutlinedIcon  fontSize="large" color="inherit" />
                             </StyledBadge>
                         </IconButton>

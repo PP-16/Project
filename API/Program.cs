@@ -1,4 +1,5 @@
 using System.Text;
+using API;
 using API.Data;
 using API.Entities;
 using API.RequestHelpers;
@@ -113,6 +114,9 @@ var app = builder.Build();
         {
             logger.LogError(ex, "Problem migrating data");
         }
+#endregion
+#region ส่ง error ไปให้ Axios ตอนทำ Interceptor
+  app.UseMiddleware<ExceptionMiddleware>(); 
 #endregion
 
 

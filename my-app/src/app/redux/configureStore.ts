@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { basketSlice } from '../../features/basket/basketSlice';
+import { productSlice } from '../../features/product/productSlice';
 import { counterSlice } from './counterSlice';
 
 //configureStore เป็นของ redux toolkits ทำหน้าที่รวบรวม Slice/Reducer
 export const store = configureStore({
     reducer:{
         counter : counterSlice.reducer,
+        basket: basketSlice.reducer,
+        product : productSlice.reducer,
     }
 })
 

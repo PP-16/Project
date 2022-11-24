@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Avatar,
   Button,
@@ -10,14 +11,23 @@ import {
   Box,
 } from "@mui/material";
 import { red } from "@mui/material/colors";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import agent from "../../app/api/agent";
+import { useStoreContext } from "../../app/contact/StoreContext";
 import { Product } from "../../app/models/Product";
+import { useAppDispatch, useAppSelector } from "../../app/redux/configureStore";
+import { addBasketItemAsync, setBasket } from "../basket/basketSlice";
 
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
+  const { status } = useAppSelector((state) => state.basket);
+  const dispatch =  useAppDispatch()
+
+
   return (
     <Card sx={{ display: "flex", width: 500, height: 250 }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -37,7 +47,17 @@ export default function ProductCard({ product }: Props) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">ADD TO CART</Button>
+        <LoadingButton
+          loading={status.includes("pendingAddItem" + product.id)} //includes('pending') ข้อความที่ต้องการค้นหาหรือเปรียบเทียบ
+          onClick={() =>
+            dispatch(addBasketItemAsync({ productId: product.id }))
+          }
+          size="small"
+        >
+          Add to cart
+        </LoadingButton>
+
+
           <Button component={Link} to={`/product/${product.id}`} size="small">
             VIEW
           </Button>
