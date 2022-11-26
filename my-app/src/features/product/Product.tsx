@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/Product";
 import { useAppDispatch, useAppSelector } from "../../app/redux/configureStore";
-import CheckboxButtons from "./components/CheckboxButtons";
-import RadioButtonGroup from "./components/RadioButtonGroup";
+import AppPagination from "../components/AppPagination";
+import CheckboxButtons from "../components/CheckboxButtons";
+import RadioButtonGroup from "../components/RadioButtonGroup";
 import ProductList from "./ProductList";
-import { fetchFilters, fetchProductsAsync, productSelectors, setProductParams } from "./productSlice";
+import { fetchFilters, fetchProductsAsync, productSelectors, setPageNumber, setProductParams } from "./productSlice";
 
 const sortOptions = [
   { value: "name", label: "Alphabetical" },
@@ -14,12 +15,13 @@ const sortOptions = [
   { value: "price", label: "Price - Low to high" },
 ];
 
+
 export default function Catalog() {
   const products = useAppSelector(productSelectors.selectAll)
   const {productsLoaded,status,filtersLoaded,    brands,
     types,
     productParams,
-    // metaData,
+    metaData,
 } = useAppSelector(state=>state.product)
   const dispatch = useAppDispatch()
 
@@ -31,8 +33,7 @@ export default function Catalog() {
     if (!filtersLoaded) dispatch(fetchFilters());
   }, [filtersLoaded, dispatch]);
 
-
-  if(status.includes('pending')) return <LoadingComponent message="Loading Products..."/>
+  if (!filtersLoaded) return <LoadingComponent message="Loading Products..." />;
 
   return (
     <Grid container columnSpacing={4}>
@@ -60,15 +61,30 @@ export default function Catalog() {
 
       </Paper>
       <Paper sx={{ mb: 2, p: 2 }}>
-           Types checkbox
+      <CheckboxButtons
+            items={types}
+            checked={productParams.types}
+            onChange={(items: string[]) =>
+              dispatch(setProductParams({ types: items }))
+            }
+          />
+
       </Paper>
     </Grid>
     <Grid item xs={9}>
       <ProductList products={products} />
     </Grid>
     <Grid item xs={3} />
-    <Grid item xs={9} sx={{ mb: 2 }}>
-      <h1>Paginations</h1>
+    <Grid item xs={9} sx={{ mb: 2,mt: 2 }}>
+    {metaData && (
+          <AppPagination
+            metaData={metaData}
+            onPageChange={(page: number) =>
+              dispatch(setPageNumber({ pageNumber: page }))
+            }
+          />
+        )}  
+
     </Grid>
   </Grid>
 

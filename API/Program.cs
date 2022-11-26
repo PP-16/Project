@@ -89,8 +89,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                                    .GetBytes(builder.Configuration["JWTSettings:TokenKey"]))
                            };
                        });
-
-builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 #endregion

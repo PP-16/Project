@@ -2,7 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/too
 import agent from "../../app/api/agent";
 import { Product, ProductParams } from "../../app/models/Product";
 import { RootState } from "../../app/redux/configureStore";
-import { MetaData } from "./components/pagination";
+import { MetaData } from "../components/pagination";
 
 interface CatalogState {
     productsLoaded: boolean;
@@ -101,6 +101,11 @@ export const productSlice = createSlice({
         setMetaData: (state, action) => {
             state.metaData = action.payload;
         },
+        setPageNumber: (state, action) => {
+            state.productsLoaded = false;
+            state.productParams = {...state.productParams, ...action.payload};
+        },
+
 
     },
     extraReducers: (builder => {
@@ -146,6 +151,6 @@ export const productSlice = createSlice({
 
 export const productSelectors = productsAdapter.getSelectors((state: RootState) => state.product); 
 
-export const {setProductParams, resetProductParams,setMetaData } = productSlice.actions;
+export const {setProductParams, resetProductParams,setMetaData,setPageNumber } = productSlice.actions;
 
 
