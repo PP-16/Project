@@ -23,6 +23,14 @@ namespace API.Controllers
             _context = context;
 
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<VoucherDto>> GetVoucher(int id)
+        {
+             var voucher = await _context.Vouchers.FirstAsync(I=>I.Id==id);
+            if(voucher == null) return NotFound();
+
+            return Ok(voucher);
+        }
         [HttpGet]
         public async Task<ActionResult<VoucherDto>> GetVoucher()
         {

@@ -19,6 +19,7 @@ namespace API.Extensions
                 Items = basket.Items.Select(item => new BasketItemDto
                 {
                     ProductId = item.ProductId,
+                    PictureUrl = item.Product.ImageUrl,
                     Name = item.Product.Name,
                     Price = item.Product.Price,
                     Quantity = item.Quantity,

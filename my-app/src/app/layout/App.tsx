@@ -89,7 +89,7 @@ const mainroute = (
     <Route path="/" element={<HomePage />} />
     <Route path="/About" element={<AboutPage />} />
     <Route path="/product" element={<Product />} />
-    <Route path="/Catalog/:id" element={<ProductDetails />} />
+    <Route path="/product/:id" element={<ProductDetails />} />
     <Route path="/basket" element={<BasketPage />} />
     <Route path="/register" element={<Register />} />
     <Route path="*" element={<NotFound />} />

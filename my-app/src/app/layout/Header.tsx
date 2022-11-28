@@ -81,8 +81,8 @@ interface Props {
 //#region badge
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
-    right: -3,
-    top: -1,
+    right: 1,
+    top: 10,
     border: `2px solid`,
   },
 }));
@@ -341,7 +341,7 @@ export default function Header(props: any) {
               />
             </Search>
             <IconButton
-              sx={{ ml: 15 }}
+              sx={{ ml: 15,mt:1 }}
               color="inherit"
               component={NavLink}
               to="/basket"
