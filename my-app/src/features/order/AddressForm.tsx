@@ -6,7 +6,7 @@ import AppCheckbox from '../components/AppCheckbox';
 import AppTextInput from '../components/AppTextInput';
 
 export default function AddressForm() {
-  const {control} = useFormContext()
+  const {control, formState} = useFormContext()
 
   return (
     <React.Fragment>
@@ -46,7 +46,7 @@ export default function AddressForm() {
 
         <Grid item xs={12}>
           <AppCheckbox
-            //disabled={!formState.isDirty}
+            disabled={!formState.isDirty}
             control={control}
             name="saveAddress"
             label="Use this address for payment details"

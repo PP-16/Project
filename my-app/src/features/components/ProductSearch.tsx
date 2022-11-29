@@ -1,7 +1,7 @@
 import { debounce, TextField } from "@mui/material";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/redux/configureStore";
-import { setProductParams } from "./productSlice";
+import { setProductParams } from "../product/productSlice";
 
 export default function ProductSearch() {
     const { productParams } = useAppSelector((state) => state.product);
@@ -15,9 +15,6 @@ export default function ProductSearch() {
   
     return (
       <TextField
-        label="Search products"
-        variant="outlined"
-        fullWidth
         value={searchTerm || ""}
         onChange={(event: any) => {
           setSearchTerm(event.target.value);

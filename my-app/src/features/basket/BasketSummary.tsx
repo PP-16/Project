@@ -1,18 +1,19 @@
-import React from 'react'
+import React from "react";
 import {
-    TableContainer,
-    Paper,
-    Table,
-    TableBody,
-    TableRow,
-    TableCell,
-  } from "@mui/material";
-import { useStoreContext } from '../../app/contact/StoreContext';
-import { currencyFormat } from '../../app/util/util';
-import { useAppSelector } from '../../app/redux/configureStore';
-  
+  TableContainer,
+  Paper,
+  Table,
+  TableBody,
+  TableRow,
+  TableCell,
+  TextField,
+} from "@mui/material";
+import { useStoreContext } from "../../app/contact/StoreContext";
+import { currencyFormat } from "../../app/util/util";
+import { useAppSelector } from "../../app/redux/configureStore";
+
 export default function BasketSummary() {
-    const { basket } = useAppSelector(state=>state.basket)
+  const { basket } = useAppSelector((state) => state.basket);
   const subtotal =
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ??
     0;
@@ -31,6 +32,12 @@ export default function BasketSummary() {
               <TableCell colSpan={2}>Delivery fee*</TableCell>
               <TableCell align="right">{deliveryFee}</TableCell>
             </TableRow>
+            {/* <TableRow>
+              <TableCell colSpan={2}>Voucher</TableCell>
+              <TableCell align="right">
+              <TextField id="standard-basic" />
+              </TableCell>
+            </TableRow> */}
             <TableRow>
               <TableCell colSpan={2}>Total</TableCell>
               <TableCell align="right">
@@ -49,5 +56,4 @@ export default function BasketSummary() {
       </TableContainer>
     </>
   );
-
 }

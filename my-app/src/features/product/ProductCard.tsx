@@ -29,7 +29,7 @@ export default function ProductCard({ product }: Props) {
 
 
   return (
-    <Card sx={{ display: "flex", width: 500, height: 250 }}>
+    <Card sx={{ display: "flex", width: 500, height: 250,borderRadius:5 }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography component="div" variant="h5">
@@ -63,7 +63,7 @@ export default function ProductCard({ product }: Props) {
           </Button>
         </CardActions>
       </Box>
-      <CardMedia component="img" sx={{ width: 300 }} image={product.imageUrl} />
+      <CardMedia component="img" sx={{ width: 300,borderRadius:3 }} image={product.imageUrl} />
     </Card>
   );
 }

@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import SearchIcon from "@mui/icons-material/Search";
-import { alpha, Badge, BadgeProps, Fade, List, ListItem, styled } from "@mui/material";
+import { alpha, Badge, BadgeProps, debounce, Fade, List, ListItem, styled } from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import CssBaseline from "@mui/material/CssBaseline";
 import Slide from "@mui/material/Slide";
@@ -22,8 +22,11 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlined";
 import { NavLink } from "react-router-dom";
 import { useStoreContext } from "../contact/StoreContext";
-import { useAppSelector } from "../redux/configureStore";
+import { useAppDispatch, useAppSelector } from "../redux/configureStore";
 import SignedinMenu from "../../features/account/SignedinMenu";
+import { useState } from "react";
+import { setProductParams } from "../../features/product/productSlice";
+import AccountIcon from "./AccountIcon";
 
 //#region Search
 const Search = styled("div")(({ theme }) => ({
@@ -60,9 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
+
   },
 }));
 //#endregion
@@ -116,6 +117,18 @@ export default function Header(props: any) {
   const { user } = useAppSelector((state) => state.account);
   const { basket } = useAppSelector((state) => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+
+//#region search
+const { productParams } = useAppSelector((state) => state.product);
+const [searchTerm, setSearchTerm] = useState(productParams.searchTerm);
+const dispatch = useAppDispatch();
+
+//หน่วงเวลารอให้พิมพ์ข้อความ
+const debouncedSearch = debounce((event: any) => {
+  dispatch(setProductParams({ searchTerm: event.target.value }));
+});
+
+//#endregion
 
   //#region bar1
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -297,7 +310,7 @@ export default function Header(props: any) {
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip> */}
-                {user ? (
+                {/* {user ? (
                   <SignedinMenu />
                 ) : (
                   <List sx={{ display: "flex" }}>
@@ -312,7 +325,8 @@ export default function Header(props: any) {
                       </ListItem>
                     ))}
                   </List>
-                )}
+                )} */}
+                <AccountIcon/>
             </Box>
           </Toolbar>
         </Container>
@@ -338,6 +352,11 @@ export default function Header(props: any) {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
+                value={searchTerm || ""}
+                onChange={(event: any) => {
+                  setSearchTerm(event.target.value);
+                  debouncedSearch(event);
+                }}
               />
             </Search>
             <IconButton
@@ -351,7 +370,7 @@ export default function Header(props: any) {
               </StyledBadge>
             </IconButton>
           </Toolbar>
-        </HideOnScroll>
+        </HideOnScroll> 
       </AppBar>
     </>
   );

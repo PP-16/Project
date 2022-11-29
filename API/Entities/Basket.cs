@@ -9,6 +9,8 @@ namespace API.Entities
     {
         public int Id { get; set; }
         public string BuyerId { get; set; }
+        public string? PaymentIntentId { get; set; }
+        public string? ClientSecret { get; set; }
 
         //สร้าง และ Include BasketItem ให้โดยอัตโนมัติ
         public List<BasketItem> Items { get; set; } = new();

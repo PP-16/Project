@@ -1,4 +1,5 @@
 import {
+  Box,
   Container,
   createTheme,
   CssBaseline,
@@ -26,6 +27,7 @@ import { fetchCurrentUser } from "../../features/account/accountSlice";
 import Register from "../../features/account/Register";
 import { PrivateLogin, PrivateRoute } from "./PrivateRoute";
 import CheckoutPage from "../../features/order/CheckoutPage";
+import OrderPage from "../../features/order/OrderPage";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -77,7 +79,7 @@ export default function App() {
         {fullscreen ? (
           <>{mainroute}</>
         ) : (
-          <Container sx={{ mt: 2 }}>{mainroute}</Container>
+          <Box sx={{ mt: 2 ,ml:10,mr:10,mb:2}}>{mainroute}</Box>
         )}
       </ThemeProvider>
     </>
@@ -103,7 +105,8 @@ const mainroute = (
       }
     />
     <Route element={<PrivateRoute />}>
-      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />\
+      <Route path="/orders" element={<OrderPage/>}/>
     </Route>
 
     {/* <Route element={<PrivateRoute roles={["Admin"]}/>}>

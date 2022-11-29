@@ -81,7 +81,7 @@ if (!product) return <NotFound />;
   //#endregion
   return (
     <>
-      <Paper elevation={3} sx={{ borderRadius: 8 , width :1200, height:450 }}>
+      <Paper elevation={3} sx={{ borderRadius: 8 , width :1200, height:450,ml:10 }}>
         <Grid container sx={{ mt: 5 }}>
           <Grid item xs={6} sx={{borderRadius:10,mt:6}}>
             <Container>
@@ -152,7 +152,7 @@ if (!product) return <NotFound />;
           </Grid>
         </Grid>
       </Paper>
-      <Paper elevation={3} sx={{ borderRadius: 8 , width :1200, height:450 }}>
+      <Paper elevation={3} sx={{ borderRadius: 8 , width :1200, height:450,ml:10 }}>
         <Grid container sx={{ mt: 5 }}>
           <Grid item xs={6} sx={{mt:6}}>
             <Container sx={{borderRadius:10}}>

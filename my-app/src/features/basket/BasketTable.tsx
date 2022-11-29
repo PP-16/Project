@@ -18,7 +18,7 @@ interface Props {
   
     return (
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 550 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>Product</TableCell>
@@ -39,7 +39,7 @@ interface Props {
                     <img
                       src={item.pictureUrl}
                       alt={item.name}
-                      style={{ height: 50, marginRight: 20 }}
+                      style={{ height: 80, marginRight: 2 }}
                     />
                     <span>{item.name}</span>
                   </Box>

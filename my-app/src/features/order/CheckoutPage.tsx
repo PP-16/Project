@@ -10,6 +10,13 @@ import { FormProvider, useForm, FieldValues } from "react-hook-form";
 import AddressForm from "./AddressForm";
 import { validationSchema } from "./checkoutValidation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Review from "./Review";
+import PaymentForm from "./PaymentForm";
+import { clearBasket } from "../basket/basketSlice";
+import agent from "../../app/api/agent";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "../../app/redux/configureStore";
+import { LoadingButton } from "@mui/lab";
 
 const steps = ["Shipping address", "Review your order", "Payment details"];
 
@@ -17,10 +24,10 @@ function getStepContent(step: number) {
   switch (step) {
     case 0:
       return <AddressForm />;
-    //     case 1:
-    // return <Review />;
-    //     case 2:
-    // return <PaymentForm />;
+        case 1:
+    return <Review />;
+        case 2:
+    return <PaymentForm />;
 
     default:
       throw new Error("Unknown step");
@@ -30,20 +37,55 @@ function getStepContent(step: number) {
 export default function CheckoutPage() {
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = (data: FieldValues) => {
-    console.log(data);
-    setActiveStep(activeStep + 1);
+  const [orderNumber, setOrderNumber] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const handleNext = async (data: FieldValues) => {
+    //ถ้าบางตัวยังไม่มีจะเป็น undefined
+    const { nameOnCard, saveAddress, ...shippingAddress } = data;
+    if (activeStep === steps.length - 1) {
+      setLoading(true);  //ขณะที่ไป api
+      try {
+        const orderNumber = await agent.Orders.create({
+          saveAddress,
+          shippingAddress,
+        });
+        setOrderNumber(orderNumber);
+        setActiveStep(activeStep + 1);
+        dispatch(clearBasket());
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    } else {
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
   const currentValidationSchema = validationSchema[activeStep];
 
   const methods = useForm({
     mode: "all",
     resolver: yupResolver(currentValidationSchema),
   });
+    //โหลดที่อยู่ของ User
+    useEffect(() => {
+      agent.Account.fetchAddress()
+          .then(response => {
+              if (response) {
+                  //reset ค่าของ Form ,กำหนด saveAddress: false เพราะโหลดมาแล้ว 
+                  methods.reset({...methods.getValues(), ...response, saveAddress: false})
+              }
+          })
+  }, [methods])
+  
+
 
   return (
     <FormProvider {...methods}>
@@ -68,7 +110,7 @@ export default function CheckoutPage() {
                 Thank you for your order.
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
+                Your order number is #{orderNumber}.  We have emailed your order
                 confirmation, and will send you an update when your order has
                 shipped.
               </Typography>
@@ -82,14 +124,16 @@ export default function CheckoutPage() {
                     Back
                   </Button>
                 )}
-                <Button
+                <LoadingButton
+                  loading={loading}
                   disabled={!methods.formState.isValid}
                   variant="contained"
                   type="submit"
                   sx={{ mt: 3, ml: 1 }}
                 >
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
-                </Button>
+                </LoadingButton>
+
               </Box>
             </form>
           )}

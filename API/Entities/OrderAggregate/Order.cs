@@ -17,6 +17,7 @@ namespace API.Entities.OrderAggregate
         public long DeliveryFee { get; set; }
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
         public Voucher Voucher { get; set; }
+                public string PaymentIntentId { get; set; }
         public long GetTotal()
         {
             if (Voucher == null)
