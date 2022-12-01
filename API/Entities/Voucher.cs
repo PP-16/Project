@@ -11,5 +11,6 @@ namespace API.Entities
         public string Name { get; set; }
         public string Detail { get; set; }
         public int Discount { get; set; }
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
     }
 }

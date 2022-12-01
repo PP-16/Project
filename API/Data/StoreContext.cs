@@ -14,6 +14,7 @@ namespace API.Data
 
         
         public DbSet<Product> Products { get; set; }
+        public DbSet<ImageProduct> ImageProduct { get; set; }
         public DbSet<Sender> Sender { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Basket> Baskets { get; set; }

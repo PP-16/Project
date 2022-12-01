@@ -18,7 +18,7 @@ namespace API.DTOs
         public long DeliveryFee { get; set; }
         public string OrderStatus { get; set; }
         public long Total { get; set; }
-        public Voucher Voucher {get;set;}
+        public string? Voucher {get;set;}
 
     }
 }

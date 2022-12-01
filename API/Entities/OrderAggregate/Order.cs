@@ -16,8 +16,8 @@ namespace API.Entities.OrderAggregate
         public long Subtotal { get; set; }
         public long DeliveryFee { get; set; }
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
-        public Voucher Voucher { get; set; }
-                public string PaymentIntentId { get; set; }
+        public string Voucher { get; set; }
+        public string PaymentIntentId { get; set; }
         public long GetTotal()
         {
             if (Voucher == null)
@@ -26,7 +26,7 @@ namespace API.Entities.OrderAggregate
             }
             else
             {
-                return Subtotal + DeliveryFee - Voucher.Discount;
+                return Subtotal + DeliveryFee;
             }
 
         }

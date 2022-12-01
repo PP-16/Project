@@ -14,5 +14,8 @@ namespace API.Entities
         public string Comment {get;set;}
         public int Star {get;set;}
         public string ImageReview { get; set; }= string.Empty;
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+
+
     }
 }

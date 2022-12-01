@@ -12,9 +12,6 @@ namespace API.Entities.OrderAggregate
         public ProductItemOrdered ItemOrdered { get; set; }
         public long Price { get; set; }
         public int Quantity { get; set; }
-        
-        public int VoucherId { get; set; }
-        public Voucher Voucher { get; set; }
     }
 
 }

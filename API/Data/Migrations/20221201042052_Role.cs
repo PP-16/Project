@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Data.Migrations
 {
-    public partial class AddReview : Migration
+    public partial class Role : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,7 +56,9 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    BuyerId = table.Column<string>(type: "TEXT", nullable: false)
+                    BuyerId = table.Column<string>(type: "TEXT", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "TEXT", nullable: true),
+                    ClientSecret = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,6 +77,32 @@ namespace API.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    BuyerId = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingAddress_FullName = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingAddress_Address1 = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingAddress_Address2 = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingAddress_City = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingAddress_State = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingAddress_Zip = table.Column<string>(type: "TEXT", nullable: false),
+                    ShippingAddress_Country = table.Column<string>(type: "TEXT", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Subtotal = table.Column<long>(type: "INTEGER", nullable: false),
+                    DeliveryFee = table.Column<long>(type: "INTEGER", nullable: false),
+                    OrderStatus = table.Column<int>(type: "INTEGER", nullable: false),
+                    Voucher = table.Column<string>(type: "TEXT", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,7 +128,8 @@ namespace API.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Detail = table.Column<string>(type: "TEXT", nullable: false),
-                    Discount = table.Column<int>(type: "INTEGER", nullable: false)
+                    Discount = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,34 +291,26 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "OrderItem",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    BuyerId = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingAddress_FullName = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingAddress_Address1 = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingAddress_Address2 = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingAddress_City = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingAddress_State = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingAddress_Zip = table.Column<string>(type: "TEXT", nullable: false),
-                    ShippingAddress_Country = table.Column<string>(type: "TEXT", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Subtotal = table.Column<long>(type: "INTEGER", nullable: false),
-                    DeliveryFee = table.Column<long>(type: "INTEGER", nullable: false),
-                    OrderStatus = table.Column<int>(type: "INTEGER", nullable: false),
-                    VoucherId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ItemOrdered_ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ItemOrdered_Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ItemOrdered_PictureUrl = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<long>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_OrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Vouchers_VoucherId",
-                        column: x => x.VoucherId,
-                        principalTable: "Vouchers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_OrderItem_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -320,6 +341,29 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ImageProduct",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    image = table.Column<string>(type: "TEXT", nullable: false),
+                    image2 = table.Column<string>(type: "TEXT", nullable: false),
+                    image3 = table.Column<string>(type: "TEXT", nullable: false),
+                    image4 = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ImageProduct", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImageProduct_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reviews",
                 columns: table => new
                 {
@@ -329,7 +373,8 @@ namespace API.Data.Migrations
                     BuyerId = table.Column<string>(type: "TEXT", nullable: false),
                     Comment = table.Column<string>(type: "TEXT", nullable: false),
                     Star = table.Column<int>(type: "INTEGER", nullable: false),
-                    ImageReview = table.Column<string>(type: "TEXT", nullable: false)
+                    ImageReview = table.Column<string>(type: "TEXT", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -378,45 +423,15 @@ namespace API.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "OrderItem",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ItemOrdered_ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ItemOrdered_Name = table.Column<string>(type: "TEXT", nullable: false),
-                    ItemOrdered_PictureUrl = table.Column<string>(type: "TEXT", nullable: false),
-                    Price = table.Column<long>(type: "INTEGER", nullable: false),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    VoucherId = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrderId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItem", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_OrderItem_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_OrderItem_Vouchers_VoucherId",
-                        column: x => x.VoucherId,
-                        principalTable: "Vouchers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { 1, "d57738ef-b284-48bb-ba3b-f75bcfd9573b", "Member", "MEMBER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 1, "0cf0cb50-abf1-479e-8898-00350aa01e4a", "Member", "MEMBER" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { 2, "07611ccd-adb1-46ea-96cd-719f92d6a447", "Admin", "ADMIN" });
+                values: new object[] { 2, "a9c3d603-3f79-4fc4-9ee0-97ae51f656b5", "Admin", "ADMIN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -466,19 +481,14 @@ namespace API.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ImageProduct_ProductId",
+                table: "ImageProduct",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_OrderId",
                 table: "OrderItem",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderItem_VoucherId",
-                table: "OrderItem",
-                column: "VoucherId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Orders_VoucherId",
-                table: "Orders",
-                column: "VoucherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -527,6 +537,9 @@ namespace API.Data.Migrations
                 name: "BasketItems");
 
             migrationBuilder.DropTable(
+                name: "ImageProduct");
+
+            migrationBuilder.DropTable(
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
@@ -537,6 +550,9 @@ namespace API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserAddress");
+
+            migrationBuilder.DropTable(
+                name: "Vouchers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -555,9 +571,6 @@ namespace API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Vouchers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

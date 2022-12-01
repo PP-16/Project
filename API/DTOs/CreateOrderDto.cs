@@ -12,8 +12,7 @@ namespace API.DTOs
         public bool SaveAddress { get; set; }
         public ShippingAddress ShippingAddress { get; set; }
 
-        public int VoucherId {get;set;}
-        public Voucher Voucher {get;set;}
+        public string? Voucher{get;set;}
 
     }
 }

@@ -81,6 +81,38 @@ namespace API.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("API.Entities.ImageProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("image")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("image2")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("image3")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("image4")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ImageProduct");
+                });
+
             modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -107,12 +139,11 @@ namespace API.Data.Migrations
                     b.Property<long>("Subtotal")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("VoucherId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Voucher")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("VoucherId");
 
                     b.ToTable("Orders");
                 });
@@ -132,14 +163,9 @@ namespace API.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("VoucherId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("VoucherId");
 
                     b.ToTable("OrderItem");
                 });
@@ -196,6 +222,9 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
@@ -239,14 +268,14 @@ namespace API.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "91db30b5-1de3-4f33-9e86-f48c82e00d5b",
+                            ConcurrencyStamp = "d57738ef-b284-48bb-ba3b-f75bcfd9573b",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "a46bb8c4-d8e5-4f90-a4b6-068ee949ce7e",
+                            ConcurrencyStamp = "a9c3d603-3f79-4fc4-9ee0-97ae51f656b5",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -429,6 +458,9 @@ namespace API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Vouchers");
@@ -552,14 +584,19 @@ namespace API.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
+            modelBuilder.Entity("API.Entities.ImageProduct", b =>
                 {
-                    b.HasOne("API.Entities.Voucher", "Voucher")
+                    b.HasOne("API.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("VoucherId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("API.Entities.OrderAggregate.Order", b =>
+                {
                     b.OwnsOne("API.Entities.OrderAggregate.ShippingAddress", "ShippingAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
@@ -603,8 +640,6 @@ namespace API.Data.Migrations
 
                     b.Navigation("ShippingAddress")
                         .IsRequired();
-
-                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("API.Entities.OrderAggregate.OrderItem", b =>
@@ -612,12 +647,6 @@ namespace API.Data.Migrations
                     b.HasOne("API.Entities.OrderAggregate.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");
-
-                    b.HasOne("API.Entities.Voucher", "Voucher")
-                        .WithMany()
-                        .HasForeignKey("VoucherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.OwnsOne("API.Entities.OrderAggregate.ProductItemOrdered", "ItemOrdered", b1 =>
                         {
@@ -645,8 +674,6 @@ namespace API.Data.Migrations
 
                     b.Navigation("ItemOrdered")
                         .IsRequired();
-
-                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("API.Entities.Product", b =>
