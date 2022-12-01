@@ -17,17 +17,14 @@ export function PrivateRoute({ roles }: Props) {
   localStorage.setItem("savepath", path);
 
   if (!user) {
-    // Redirect them to the /login page, but save the current location they were
-    // trying to go to when they were redirected. This allows us to send them
-    // along to that page after they login, which is a nicer user experience
-    // than dropping them off on the home page.
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
+
   //ตรวจสอบว่าตรงกับ roles ["a","b","c"] ใดๆ ที่ส่งเข้ามาหรือไม่
-  // if (roles && !roles?.some((r) => user.roles?.includes(r))) {
-  //   toast.error("Not authorized to access this area");
-  //   return <Navigate to="/catalog" state={{ from: location }} replace />;
-  // }
+  if (roles && !roles?.some((r) => user.roles?.includes(r))) {
+    toast.error("Not authorized to access this area");
+    return <Navigate to="/catalog" state={{ from: location }} replace />;
+  }
 
   return <Outlet />;
 }
@@ -50,3 +47,4 @@ export function PrivateLogin({ children }: { children: JSX.Element }) {
 
   return children;
 }
+

@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-//    [Authorize]
+ [Authorize]
     public class OrdersController : BaseApiController
     {
         private readonly StoreContext _context;
@@ -27,7 +27,6 @@ namespace API.Controllers
         {
             return await _context.Orders
                .ProjectOrderToOrderDto()
-               .Include(v=>v.Voucher)
                .Where(x => x.BuyerId == User.Identity.Name)
                .ToListAsync();
         }
@@ -37,7 +36,6 @@ namespace API.Controllers
         {
             return await _context.Orders
                 .ProjectOrderToOrderDto()
-                .Include(v=>v.Voucher)
                 .Where(x => x.BuyerId == User.Identity.Name && x.Id == id)
                 .FirstOrDefaultAsync();
         }
@@ -78,18 +76,21 @@ namespace API.Controllers
                 items.Add(orderItem); //แอดรายการสินค้าทั้งหมดที่สั่งซื้อ
                 productItem.QuantityInStock -= item.Quantity; //ลดจำนวนสินค้าในสต๊อก
             }
+            var dateTime = DateTime.Now;
             var subtotal = items.Sum(item => item.Price * item.Quantity);
             // if (voucher.Discount != null)
             // {
             //      subtotal = items.Sum(item => (item.Price * item.Quantity)-item.Voucher.Discount);
             // }
             var deliveryFee = subtotal > 10000 ? 0 : 500;
-            var voucher = await _context.Vouchers.FirstOrDefaultAsync(v=>v.Id.Equals(orderDto.VoucherId));
-            if (voucher == null){
-                return Ok(subtotal);
+            var voucher = await _context.Vouchers.FirstOrDefaultAsync(v=>v.Name.Equals(orderDto.Voucher));
+            if (voucher != null){
+                if(voucher.Name != orderDto.Voucher){}
+                var totalprice = subtotal *(100- voucher.Discount )/100;
+                subtotal = totalprice;
             }
             else{
-              return Ok((subtotal * voucher.Discount) /100) ;
+              
             }
             //รวบรวม Order,OrderItems
             var order = new Order
@@ -99,9 +100,9 @@ namespace API.Controllers
                 ShippingAddress = orderDto.ShippingAddress,
                 Subtotal = subtotal,
                 DeliveryFee = deliveryFee,
-                Voucher = voucher
+                Voucher = orderDto.Voucher,
+                PaymentIntentId = basket.PaymentIntentId
             };
-            _context.Orders.Include(v=>v.Voucher);
             _context.Orders.Add(order); //สร้าง Order และ OrderItem ในขั้นตอนเดียว
             _context.Baskets.Remove(basket);  //ลบ  Basket และ BasketItem ในขั้นตอนเดียว
 

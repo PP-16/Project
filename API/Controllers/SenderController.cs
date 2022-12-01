@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    // [Authorize]
+     [Authorize]
     public class SenderController : BaseApiController
     {
         private readonly StoreContext _context;

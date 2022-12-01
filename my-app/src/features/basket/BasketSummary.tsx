@@ -18,7 +18,6 @@ export default function BasketSummary() {
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ??
     0;
   const deliveryFee = subtotal > 10000 ? 0 : 500;
-
   return (
     <>
       <TableContainer component={Paper} variant={"outlined"}>
@@ -35,13 +34,13 @@ export default function BasketSummary() {
             {/* <TableRow>
               <TableCell colSpan={2}>Voucher</TableCell>
               <TableCell align="right">
-              <TextField id="standard-basic" />
+              <TextField name="voucher" label="voucher" />
               </TableCell>
             </TableRow> */}
             <TableRow>
               <TableCell colSpan={2}>Total</TableCell>
               <TableCell align="right">
-                {currencyFormat(subtotal + deliveryFee)}
+                {currencyFormat((subtotal + deliveryFee*(100)))}
               </TableCell>
             </TableRow>
             <TableRow>

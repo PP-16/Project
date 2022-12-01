@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    // [Authorize]
+    [Authorize]
     public class CategoryController : BaseApiController
     {
         private readonly StoreContext _context;

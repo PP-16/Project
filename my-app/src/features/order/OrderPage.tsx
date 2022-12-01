@@ -4,11 +4,11 @@ import {
   import React, { useEffect, useState } from "react";
   import agent from "../../app/api/agent";
   import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Order } from "../../app/models/Order";
+import { Orders } from "../../app/models/Orders";
   import { currencyFormat } from "../../app/util/util";
   
   export default function OrderPage() {
-    const [orders, setOrders] = useState<Order[] | null>(null);
+    const [orders, setOrders] = useState<Orders[] | null>(null);
     const [loading, setLoading] = useState(true);
   
     useEffect(() => {
@@ -26,6 +26,7 @@ import { Order } from "../../app/models/Order";
           <TableHead>
             <TableRow>
               <TableCell>Order Number</TableCell>
+              <TableCell align="right">Voucher</TableCell>
               <TableCell align="right">Total</TableCell>
               <TableCell align="right">Order Date</TableCell>
               <TableCell align="right">Order Status</TableCell>
@@ -42,8 +43,9 @@ import { Order } from "../../app/models/Order";
                   {order.id}
                 </TableCell>
                 <TableCell align="right">{currencyFormat(order.total)}</TableCell>
+                
                 <TableCell align="right">
-                  {order.orderDate.split("T")[0]}
+                  {/* {order.orderDate.split("T")[0]} */}
                 </TableCell>
                 <TableCell align="right">{order.orderStatus}</TableCell>
                 <TableCell align="right">

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { accountSlice } from '../../features/account/accountSlice';
 import { basketSlice } from '../../features/basket/basketSlice';
+import { categorySlice } from '../../features/category/categorySlice';
 import { homeSlice } from '../../features/home/homeSlice';
 import { productSlice } from '../../features/product/productSlice';
 import { counterSlice } from './counterSlice';
@@ -14,6 +15,7 @@ export const store = configureStore({
         product : productSlice.reducer,
         account: accountSlice.reducer,
         screen: homeSlice.reducer,
+        category : categorySlice.reducer,
     }
 })
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    // [Authorize]
+     [Authorize]
     public class StockController : BaseApiController
     {
         private readonly StoreContext _context;
@@ -71,6 +71,7 @@ namespace API.Controllers
         public async Task<ActionResult<Stock>> CreateStock([FromForm] CreateStockDto stockDto)
         {
             var stock = _mapper.Map<Stock>(stockDto); //แมบแบบแปลงชนิดข้อมูล
+            stock.OrderDate =DateTime.UtcNow;
                                                       //   var stock1 = await RetrieveStock();
             _context.Stocks.Add(stock);
 

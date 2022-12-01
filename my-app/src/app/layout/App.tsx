@@ -28,6 +28,9 @@ import Register from "../../features/account/Register";
 import { PrivateLogin, PrivateRoute } from "./PrivateRoute";
 import CheckoutPage from "../../features/order/CheckoutPage";
 import OrderPage from "../../features/order/OrderPage";
+import CheckoutWrapper from "../../features/order/CheckoutWrapper";
+import ProductTable from "../../features/admin/product/ProductTable";
+import CategoryTable from "../../features/admin/category/CategoryTable";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -63,7 +66,7 @@ export default function App() {
   return (
     <>
       <ThemeProvider theme={darkTheme}>
-        <ToastContainer
+        {/* <ToastContainer
           position="bottom-right"
           autoClose={5000}
           hideProgressBar={false}
@@ -73,13 +76,13 @@ export default function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-        />
+        /> */}
         <CssBaseline />
         <Header handleMode={handleMode} />
         {fullscreen ? (
           <>{mainroute}</>
         ) : (
-          <Box sx={{ mt: 2 ,ml:10,mr:10,mb:2}}>{mainroute}</Box>
+          <Box sx={{ mt: 2, ml: 10, mr: 10, mb: 2 }}>{mainroute}</Box>
         )}
       </ThemeProvider>
     </>
@@ -105,12 +108,15 @@ const mainroute = (
       }
     />
     <Route element={<PrivateRoute />}>
+      <Route path="/checkout" element={<CheckoutWrapper />} />
       <Route path="/checkout" element={<CheckoutPage />} />\
-      <Route path="/orders" element={<OrderPage/>}/>
+      <Route path="/orders" element={<OrderPage />} />
     </Route>
 
-    {/* <Route element={<PrivateRoute roles={["Admin"]}/>}>
-    <Route path="/inventory" element={<Inventory />} />
-  </Route> } */}
+    <Route element={<PrivateRoute roles={["Admin"]} />}>
+      <Route path="/tableP" element={<ProductTable />} />
+      <Route path="/tableC" element={<CategoryTable />} />
+
+    </Route>
   </Routes>
 );

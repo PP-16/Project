@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    // [Authorize]
+    //  [Authorize]
     public class VoucherController : BaseApiController
     {
         private readonly StoreContext _context;
@@ -44,6 +44,7 @@ namespace API.Controllers
         public async Task<ActionResult<Voucher>> CreateVoucher([FromForm] VoucherDto voucherDto)
         {
            var voucher = _mapper.Map<Voucher>(voucherDto); //แมบแบบแปลงชนิดข้อมูล
+           voucher.OrderDate = DateTime.UtcNow;
 
             _context.Vouchers.Add(voucher);
 

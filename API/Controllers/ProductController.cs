@@ -10,7 +10,7 @@ using API.Extensions;
 
 namespace API.Controllers
 {
-    // [Authorize]
+    //  [Authorize]
     public class ProductController : BaseApiController
     {
         private readonly StoreContext _context;
@@ -48,7 +48,7 @@ namespace API.Controllers
         // {
         //     return Ok(await _context.Products.Include(x => x.Category).ToListAsync());
         // }
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetProduct")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
              var product = await _context.Products.Include(c=>c.Category).FirstAsync(I=>I.Id==id);
@@ -67,7 +67,7 @@ namespace API.Controllers
             return Ok(new { brands, types });
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct([FromForm] CreateProductDto productDto)
         {
@@ -99,6 +99,7 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem creating new product" });
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<ActionResult<Product>> UpdateProduct([FromForm] UpdateProductDto productDto)
         {
@@ -143,6 +144,7 @@ namespace API.Controllers
 
             return BadRequest(new ProblemDetails { Title = "Problem updating product" });
         }
+                  [Authorize(Roles = "Admin")]      
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProduct(int id)
         {

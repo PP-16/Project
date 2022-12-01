@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-//   [Authorize]
+  [Authorize]
     public class ReviewController : BaseApiController
     {
         private readonly StoreContext _context;
@@ -36,6 +36,7 @@ namespace API.Controllers
         public async Task<ActionResult<Review>>CreatReview([FromForm] CreateReviewDto ReviewDto)
         {
             var review =_mapper.Map<Review>(ReviewDto);
+            review.OrderDate = DateTime.UtcNow;
             #region รูปภาพ
             string wwwRootPath = _webHostEnvironment.WebRootPath;
             if (ReviewDto.File != null)

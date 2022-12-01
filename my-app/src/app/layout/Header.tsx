@@ -12,7 +12,16 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import SearchIcon from "@mui/icons-material/Search";
-import { alpha, Badge, BadgeProps, debounce, Fade, List, ListItem, styled } from "@mui/material";
+import {
+  alpha,
+  Badge,
+  BadgeProps,
+  debounce,
+  Fade,
+  List,
+  ListItem,
+  styled,
+} from "@mui/material";
 import InputBase from "@mui/material/InputBase";
 import CssBaseline from "@mui/material/CssBaseline";
 import Slide from "@mui/material/Slide";
@@ -27,6 +36,7 @@ import SignedinMenu from "../../features/account/SignedinMenu";
 import { useState } from "react";
 import { setProductParams } from "../../features/product/productSlice";
 import AccountIcon from "./AccountIcon";
+import { title } from "process";
 
 //#region Search
 const Search = styled("div")(({ theme }) => ({
@@ -63,7 +73,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-
   },
 }));
 //#endregion
@@ -99,6 +108,11 @@ const settings = [
   { title: "register", path: "/register" },
 ];
 
+const admin = [
+  { title: "Category", path: "/tableC" },
+  { title: "Product", path: "/tableP" },
+];
+
 const navStyles = {
   color: "inherit",
   textDecoration: "none",
@@ -118,17 +132,17 @@ export default function Header(props: any) {
   const { basket } = useAppSelector((state) => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
-//#region search
-const { productParams } = useAppSelector((state) => state.product);
-const [searchTerm, setSearchTerm] = useState(productParams.searchTerm);
-const dispatch = useAppDispatch();
+  //#region search
+  const { productParams } = useAppSelector((state) => state.product);
+  const [searchTerm, setSearchTerm] = useState(productParams.searchTerm);
+  const dispatch = useAppDispatch();
 
-//หน่วงเวลารอให้พิมพ์ข้อความ
-const debouncedSearch = debounce((event: any) => {
-  dispatch(setProductParams({ searchTerm: event.target.value }));
-});
+  //หน่วงเวลารอให้พิมพ์ข้อความ
+  const debouncedSearch = debounce((event: any) => {
+    dispatch(setProductParams({ searchTerm: event.target.value }));
+  });
 
-//#endregion
+  //#endregion
 
   //#region bar1
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -304,29 +318,44 @@ const debouncedSearch = debounce((event: any) => {
                 </Button>
               ))}
             </Box>
+            {user && user.roles?.includes("Admin") && (
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {admin.map(({ title, path }) => (
+                  <Button
+                    component={NavLink}
+                    to={path}
+                    key={path}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    {title}
+                  </Button>
+                ))}
+              </Box>
+            )}
+
             <Box sx={{ flexGrow: 0 }}>
               {/* <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
               </Tooltip> */}
-                {/* {user ? (
-                  <SignedinMenu />
-                ) : (
-                  <List sx={{ display: "flex" }}>
-                    {settings.map(({ title, path }) => (
-                      <ListItem
-                        component={NavLink}
-                        to={path}
-                        key={path}
-                        sx={{ color: "inherit", typography: "h6" }}
-                      >
-                        {title.toUpperCase()}
-                      </ListItem>
-                    ))}
-                  </List>
-                )} */}
-                <AccountIcon/>
+              {user ? (
+                <SignedinMenu />
+              ) : (
+                <List sx={{ display: "flex" }}>
+                  {settings.map(({ title, path }) => (
+                    <ListItem
+                      component={NavLink}
+                      to={path}
+                      key={path}
+                      sx={{ color: "inherit", typography: "h6" }}
+                    >
+                      {title.toUpperCase()}
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+              {/* <AccountIcon/> */}
             </Box>
           </Toolbar>
         </Container>
@@ -360,7 +389,7 @@ const debouncedSearch = debounce((event: any) => {
               />
             </Search>
             <IconButton
-              sx={{ ml: 15,mt:1 }}
+              sx={{ ml: 15, mt: 1 }}
               color="inherit"
               component={NavLink}
               to="/basket"
@@ -370,7 +399,7 @@ const debouncedSearch = debounce((event: any) => {
               </StyledBadge>
             </IconButton>
           </Toolbar>
-        </HideOnScroll> 
+        </HideOnScroll>
       </AppBar>
     </>
   );

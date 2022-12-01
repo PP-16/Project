@@ -38,11 +38,22 @@ export default function AccountMenu() {
       ) : (
         <List sx={{ display: "flex" }}>
           {settings.map(({ title, path }) => (
-            <Tooltip title="Account settings">
-              <IconButton
+
+              <ListItem
                 component={NavLink}
                 to={path}
                 key={path}
+                sx={{ color: "inherit", typography: "h6" }}
+              >
+                {title.toUpperCase()}
+              </ListItem>
+          ))}
+        </List>
+      )}
+      
+       <Tooltip title="Account settings">
+              <IconButton
+
                 onClick={handleClick}
                 size="small"
                 sx={{ ml: 2 }}
@@ -53,29 +64,6 @@ export default function AccountMenu() {
                 <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
               </IconButton>
             </Tooltip>
-            //   <ListItem
-            //     component={NavLink}
-            //     to={path}
-            //     key={path}
-            //     sx={{ color: "inherit", typography: "h6" }}
-            //   >
-            //     {title.toUpperCase()}
-            //   </ListItem>
-          ))}
-        </List>
-      )}
-      <Tooltip title="Account settings">
-        <IconButton
-          onClick={handleClick}
-          size="small"
-          sx={{ ml: 2 }}
-          aria-controls={open ? "account-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-        >
-          <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-        </IconButton>
-      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -111,6 +99,7 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
+        
         <MenuItem>
           <Avatar /> Profile
         </MenuItem>

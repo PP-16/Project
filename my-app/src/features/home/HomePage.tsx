@@ -1,6 +1,13 @@
+import { Container, Grid } from "@mui/material";
+import { useState } from "react";
 import Slider from "react-slick";
+import { Voucher } from "../../app/models/Voucher";
+import Cardvoucher from "../voucher/Cardvoucher";
 
 export default function HomePage() {
+
+  const [vouchers, setVouchers] = useState<Voucher>();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -14,7 +21,7 @@ export default function HomePage() {
     cssEase: "linear"
   };
   return (
-    <>
+    <Container>
       <Slider {...settings}>
         <div>
           <img src="https://i.pinimg.com/originals/26/bb/4f/26bb4f08d445790b80e7a1d90dfb65ab.gif" width={1500} height={450}/>
@@ -35,6 +42,8 @@ export default function HomePage() {
         <img src="https://i.pinimg.com/564x/2f/60/bd/2f60bdc22f28a9ec83d393d35f0a1c9b.jpg" width={1500} height={450}/>
         </div>
       </Slider>
-    </>
+
+        <Cardvoucher/>
+    </Container>
   )
 }

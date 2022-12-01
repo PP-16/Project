@@ -12,8 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+
     public class PaymentsController : BaseApiController
     {
         private readonly PaymentService _paymentService;

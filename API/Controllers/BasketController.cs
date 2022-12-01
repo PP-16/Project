@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    // [Authorize]
+ [Authorize]
     public class BasketController : BaseApiController
     {
         private readonly StoreContext _context;

@@ -1,14 +1,14 @@
-export interface Order {
+export interface Orders {
     id:              number;
     buyerId:         string;
     shippingAddress: ShippingAddress;
-    orderDate:       string; //เปลี่ยนจาก Date เป็น string เพราะส่งมาเป็น json string 
+    orderDate:       string;
     orderItems:      OrderItem[];
     subtotal:        number;
     deliveryFee:     number;
     orderStatus:     string;
     total:           number;
-    voucher:         Voucher;
+    voucher:         string;
 }
 
 export interface OrderItem {
@@ -27,11 +27,4 @@ export interface ShippingAddress {
     state:    string;
     zip:      string;
     country:  string;
-}
-
-export interface Voucher {
-    id:       number;
-    name:     string;
-    detail:   string;
-    discount: number;
 }

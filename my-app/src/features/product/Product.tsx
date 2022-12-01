@@ -1,5 +1,6 @@
 import { Grid, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
+import useProducts from "../../app/hooks/useProducts";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/Product";
 import { useAppDispatch, useAppSelector } from "../../app/redux/configureStore";
@@ -17,21 +18,9 @@ const sortOptions = [
 
 
 export default function Catalog() {
-  const products = useAppSelector(productSelectors.selectAll)
-  const {productsLoaded,status,filtersLoaded,    brands,
-    types,
-    productParams,
-    metaData,
-} = useAppSelector(state=>state.product)
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    if(!productsLoaded) dispatch(fetchProductsAsync())
-  }, [productsLoaded,dispatch]);
-  
-  useEffect(() => {
-    if (!filtersLoaded) dispatch(fetchFilters());
-  }, [filtersLoaded, dispatch]);
+  const { products, brands, types, filtersLoaded, metaData } = useProducts();
+  const { productParams } = useAppSelector((state) => state.product);
+  const dispatch = useAppDispatch();
 
   if (!filtersLoaded) return <LoadingComponent message="Loading Products..." />;
 
